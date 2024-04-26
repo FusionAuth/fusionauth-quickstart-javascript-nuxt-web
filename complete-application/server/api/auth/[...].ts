@@ -34,6 +34,11 @@ export default NuxtAuthHandler({
       clientSecret: fusionAuthClientSecret,
       wellKnown: `${fusionAuthUrl}/.well-known/openid-configuration/${fusionAuthTenantId}`,
       tenantId: fusionAuthTenantId, // Only required if you're using multi-tenancy
+      authorization: {
+        params: {
+          scope: 'openid offline_access email profile',
+        },
+      },
     }),
   ],
 });
