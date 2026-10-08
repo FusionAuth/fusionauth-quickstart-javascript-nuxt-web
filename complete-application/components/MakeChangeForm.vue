@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 
+// coin values in cents, so the math stays in whole numbers
 var coins = {
-  quarters: 0.25,
-  dimes: 0.1,
-  nickels: 0.05,
-  pennies: 0.01,
+  quarters: 25,
+  dimes: 10,
+  nickels: 5,
+  pennies: 1,
 };
 
 const message = ref('');
@@ -17,11 +18,11 @@ const onMakeChange = (event) => {
   try {
     message.value = 'We can make change for';
 
-    let remainingAmount = amount.value;
-    for (const [name, nominal] of Object.entries(coins)) {
-      let count = Math.floor(remainingAmount / nominal);
-      remainingAmount =
-        Math.ceil((remainingAmount - count * nominal) * 100) / 100;
+    // work in whole cents so floating-point rounding can't drop a penny
+    let remainingCents = Math.round(Number(amount.value) * 100);
+    for (const [name, cents] of Object.entries(coins)) {
+      const count = Math.floor(remainingCents / cents);
+      remainingCents -= count * cents;
 
       message.value = `${message.value} ${count} ${name}`;
     }
